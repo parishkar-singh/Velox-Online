@@ -12,7 +12,7 @@ services:
     container_name: mongo
     image: mongo:latest
     environment:
-      - MONGO_DATABASE="parishkar"
+      - MONGO_DATABASE="volex"
     ports:
       - 27017:27017
   mongo-express:
