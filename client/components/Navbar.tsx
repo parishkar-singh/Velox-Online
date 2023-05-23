@@ -7,6 +7,7 @@ interface NavbarProps {
 }
 const Navbar: React.FC<NavbarProps> = ({navItems}) => {
     const [isExpanded, setIsExpanded] = useState(false);
+
     const containerVariants = {
         expanded: {
             width: '50%',
@@ -26,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({navItems}) => {
         },
     };
     return (
-        <motion.div
+        <motion.nav
             initial={{scale: 0}}
             animate={{scale: .9}}
             transition={{
@@ -40,7 +41,7 @@ const Navbar: React.FC<NavbarProps> = ({navItems}) => {
                 borderRadius: "100%"
             }}
         >
-            <motion.div
+            <motion.nav
                 style={{
                     borderRadius: 30,
                     cursor: "grab",
@@ -52,7 +53,7 @@ const Navbar: React.FC<NavbarProps> = ({navItems}) => {
                 whileTap={{cursor: "grabbing"}}
             >
                 <div className={`flex justify-center items-center`}>
-                    <motion.div
+                    <motion.nav
                         variants={containerVariants}
                         animate={isExpanded ? 'expanded' : 'collapsed'}
                         whileHover={isExpanded ? {width: '60%',} : {width: '30%'}}
@@ -60,16 +61,18 @@ const Navbar: React.FC<NavbarProps> = ({navItems}) => {
                             setIsExpanded(!isExpanded)
                         }}
                         className={`flex flex-row items-center justify-center text-white sticky bg-black h-[60px] mt-4 rounded-full border-none transition-100 ease-in`}>
-                        <div
+                        <ul
                             className={`flex flex-row justify-center items-center ${isExpanded ? '' : 'hidden'}`}>
                             {navItems?.map((item,index)=>(
-                            <span key={index} className={`mr-4`}>{item}</span>
+                            <li key={`link-${item}`} className={`mr-4 cursor-pointer`}>
+                                <a href={`#${item}`}>{item}</a>
+                                </li>
                             ))}
-                        </div>
-                    </motion.div>
+                        </ul>
+                    </motion.nav>
                 </div>
-            </motion.div>
-        </motion.div>
+            </motion.nav>
+        </motion.nav>
 
     );
 };
