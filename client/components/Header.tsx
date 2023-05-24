@@ -1,5 +1,5 @@
 import React from 'react';
-import Bounce from "@/motions/Bounce";
+import Bounce from "@/motion/Bounce";
 
 const Header: React.FC = () => {
     return (

@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image'
-import SpringText from "@/motions/SpringText";
+import SpringText from "@/motion/SpringText";
 import images from '../assets'
-import Bounce from "@/motions/Bounce";
+import Bounce from "@/motion/Bounce";
 
 const Product: React.FC = () => {
     return (
