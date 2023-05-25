@@ -5,9 +5,11 @@ import images from "@/assets";
 const AuthLayout = ({children}: {children: ReactNode }) => {
     return (
         <Grid sx={{p:2}} container
-              direction={`column`}
-              justifyContent={'flex-start'}
-              alignItems={'center'} >
+              className={`flex flex-col items-center justify-start`}
+              // direction={`column`}
+              // justifyContent={'flex-start'}
+              // alignItems={'center'}
+        >
             <Image src={images.Volex} className={`w-14 h-14 rounded-full object-cover`} alt={'Volex Logo'} height={40}/>
             <main>{children}</main>
         </Grid>
