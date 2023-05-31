@@ -4,12 +4,14 @@ import RegistrationForm from "@/components/Auth/RegistrationForm";
 
 const Register: React.FC = () => {
     return (
-        <AuthLayout>
-            <RegistrationForm/>
-            <div>
-                This is the register page
-            </div>
-        </AuthLayout>
+        <div className={`bg-black`}>
+            <AuthLayout>
+                <RegistrationForm/>
+                <div>
+                    This is the register page
+                </div>
+            </AuthLayout>
+        </div>
     );
 };
 

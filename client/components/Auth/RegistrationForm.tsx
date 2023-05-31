@@ -7,8 +7,8 @@ const RegistrationForm: React.FC = () => {
         console.log('form submitted');
     }
     return (
-        <div className={``}>
-            <Box sx={{border: 1, padding: 2, borderColor: '#cccccc', width: '350px', marginTop: 2}}>
+        <div className={`bg-white rounded-3xl border-black p-4`}>
+            <Box sx={{ width: '350px', marginTop: 2}}>
                 <form onSubmit={onSubmitHandler}>
                     <Grid container className={`flex flex-col justify-items-start p-2`}>
                         <span className={`text-4xl mb-4`}>Create Account</span>

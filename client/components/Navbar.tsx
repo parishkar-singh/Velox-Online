@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import {useRouter} from 'next/router';
-import SpringText from "@/motion/SpringText";
-import Bounce from "@/motion/Bounce";
 import images from '../assets'
 import {motion, AnimatePresence, useMotionValue, useTransform} from "framer-motion";
 import Image from "next/image";
@@ -13,15 +11,16 @@ import {BsBagDash} from 'react-icons/bs'
 interface NavbarProps {
     navItems?: string[]
 }
-
-
 const Navbar: React.FC<NavbarProps> = ({navItems}) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const router = useRouter()
     const handleLinkClick = (e: any) => {
         e.stopPropagation();
         e.preventDefault();
-        router.push(e.target.getAttribute('href'))
+        const href = e.target.getAttribute('href');
+        if (href) {
+            router.push(href);
+        }
     };
     const containerVariants = {
         expanded: {
@@ -55,7 +54,7 @@ const Navbar: React.FC<NavbarProps> = ({navItems}) => {
                 scale: 1.4,
                 borderRadius: "100%"
             }}
-            className={'overflow-hidden'}
+            className={'overflow-hidden sticky top-0 z-50 transition-100 ease-in'}
 
         >
             <motion.nav
