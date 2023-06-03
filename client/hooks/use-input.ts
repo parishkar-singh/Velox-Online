@@ -40,6 +40,7 @@ const inputReducer = (state: InputState, action: Action<InputActionType>) => {
      return {
             text,
             hasBeenTouched,
+            displayError,
             textChangeHandler,
             inputBlurHandler,
             clearHandler
