@@ -1,16 +1,13 @@
 import React, {useState} from 'react';
 import {useRouter} from 'next/router';
-import images from '../assets'
+import images from '@/assets'
 import {motion, AnimatePresence, useMotionValue, useTransform} from "framer-motion";
 import Image from "next/image";
-import {HiOutlineSearchCircle, HiOutlineSearch} from 'react-icons/hi'
-import {AiOutlineHome, AiOutlineShoppingCart} from 'react-icons/ai'
-import {BsFillHandbagFill} from 'react-icons/bs'
-import {BsBagDash} from 'react-icons/bs'
 
 interface NavbarProps {
     navItems?: string[]
 }
+
 const Navbar: React.FC<NavbarProps> = ({navItems}) => {
     const [isExpanded, setIsExpanded] = useState(false);
     const router = useRouter()
@@ -54,7 +51,7 @@ const Navbar: React.FC<NavbarProps> = ({navItems}) => {
                 scale: 1.4,
                 borderRadius: "100%"
             }}
-            className={'overflow-hidden sticky top-0 z-50 transition-100 ease-in'}
+            className={'overflow-visible border-none sticky top-0 z-50 transition-100 ease-in'}
 
         >
             <motion.nav
@@ -76,25 +73,25 @@ const Navbar: React.FC<NavbarProps> = ({navItems}) => {
                         onClick={() => {
                             setIsExpanded(!isExpanded)
                         }}
-                        className={`select-none flex  items-center justify-center text-white sticky bg-black h-[60px] mt-4 rounded-full border-none transition-100 ease-in ${isExpanded ? 'justify-center' : 'justify-between'}`}>
-                        {isExpanded ? '' : (
-                            <Image src={images.parishkar} alt={''}
-                                   className={`no-drag w-[50px] ml-2 h-[50px] select-none rounded-full`}/>
-                        )
-                        }
-                            <div
-                                className={`select-none flex flex-row justify-center items-center rounded-full ${isExpanded ? '' : 'hidden'}`}>
-
-                                <AiOutlineHome onClick={handleLinkClick} href={`#HomePage`} size={50}
-                                               className={'mr-1 text-neutral-200'}/>
-                                <BsBagDash onClick={handleLinkClick} href={`#Orders`} size={45}
-                                           className={'mr-1 text-neutral-200'}/>
-                                <AiOutlineShoppingCart onClick={handleLinkClick} href={`#Cart`} size={50}
-                                                       className={'mr-1 text-neutral-200'}/>
-                                {/*className={`select-none text-[14px] md:text-2xl mr-4 cursor-pointer rounded-full no-drag`}>*/}
-                            </div>
-                        <HiOutlineSearchCircle size={50} className={'mr-1 text-neutral-200'}/>
-
+                        className={` select-none flex  items-center justify-center text-white sticky bg-black h-[60px] mt-4 rounded-full border-none transition duration-200 ease-in ${isExpanded ? 'justify-center' : 'justify-between'}`}>
+                        <Image src={images.parishkar} alt={''}
+                               className={`${isExpanded ? 'hidden' : ''} no-drag w-[50px] ml-2 h-[50px] select-none rounded-full `}/>
+                        <div
+                            className={`select-none font-black font-BebasNeue italic grid grid-cols-4 text-3xl gap-10 md:gap-20 lg:gap-40 xl:60 2xl:gap-80 rounded-full transition duration-200 ease-in ${isExpanded ? '' : 'hidden'}`}>
+                            {['1', '2', '3', '4'].map(num => (
+                                <motion.span
+                                    initial={{scale: 1}}
+                                    whileHover={{scale:2}}
+                                    whileTap={{scale: 2}}
+                                    key={num}>{num}</motion.span>
+                            ))}
+                            {/*<Image className={`mr-2`} src={images.home} width={50} alt={``}/>*/}
+                            {/*<Image className={`mr-2 rounded-3xl`} src={images.me} width={55} alt={``}/>*/}
+                            {/*<Image className={`mr-2`} src={images.skills} width={50} alt={``}/>*/}
+                            {/*<Image className={`mr-2 `} src={images.projects} width={50} alt={``}/>*/}
+                        </div>
+                        {/*<Image className={`mr-1 ${isExpanded ? 'hidden' : ''}`} src={images.update} width={50}*/}
+                        {/*       alt={``}/>*/}
                     </motion.nav>
                 </motion.nav>
             </motion.nav>
@@ -103,3 +100,12 @@ const Navbar: React.FC<NavbarProps> = ({navItems}) => {
 };
 
 export default Navbar;
+
+
+// <AiOutlineHome onClick={handleLinkClick} href={`#HomePage`} size={50}
+//                className={'mr-1 text-neutral-200'}/>
+// <BsBagDash onClick={handleLinkClick} href={`#Orders`} size={45}
+//            className={'mr-1 text-neutral-200'}/>
+// <AiOutlineShoppingCart onClick={handleLinkClick} href={`#Cart`} size={50}
+//                        className={'mr-1 text-neutral-200'}/>
+

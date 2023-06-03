@@ -4,7 +4,7 @@ import RegistrationForm from "@/components/Auth/RegistrationForm";
 
 const Register: React.FC = () => {
     return (
-        <div className={`bg-black`}>
+        <div className={``}>
             <AuthLayout>
                 <RegistrationForm/>
                 <div>

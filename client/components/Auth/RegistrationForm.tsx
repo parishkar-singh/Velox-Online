@@ -7,7 +7,7 @@ const RegistrationForm: React.FC = () => {
         console.log('form submitted');
     }
     return (
-        <div className={`bg-white rounded-3xl border-black p-4`}>
+        <div className={`bg-white rounded-3xl border-2 border-neutral-200 p-4`}>
             <Box sx={{ width: '350px', marginTop: 2}}>
                 <form onSubmit={onSubmitHandler}>
                     <Grid container className={`flex flex-col justify-items-start p-2`}>
