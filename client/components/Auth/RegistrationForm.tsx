@@ -4,7 +4,7 @@ import Link from "next/link";
 import useInput from "@/hooks/input/use-input";
 import {validateNameLength, ValidatePasswordLength} from "@/utils/validation/length";
 import {ValidateEmail} from "@/utils/validation/email";
-import {NewUser} from "@/components/models/NewUser";
+import {NewUser} from "@/models/NewUser";
 
 const RegistrationForm: React.FC = () => {
     const clearForm = () => {
