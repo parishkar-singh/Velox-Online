@@ -1,28 +1,69 @@
 import React from 'react';
 import {Box, Grid, TextField, InputLabel, Typography, Button, Divider} from "@mui/material";
 import Link from "next/link";
+import useInput from "@/hooks/input/use-input";
+import {validateNameLength, ValidatePasswordLength} from "@/utils/validation/length";
+import {ValidateEmail} from "@/utils/validation/email";
 const LoginForm: React.FC = () => {
     const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+        if(emailHasError || passwordHasError)
+            return;
+        if(email.length === 0 || password.length === 0)
+            return;
+
         e.preventDefault();
         console.log('form submitted');
     }
+    const {
+        text: name,
+        shouldDisplayError: nameHasError,
+        textChangeHandler: nameChangeHandler,
+        inputBlurHandler: nameBlurHandler,
+        clearHandler: nameClearHandler,
+    } = useInput(validateNameLength);
+    const {
+        text: email,
+        shouldDisplayError: emailHasError,
+        textChangeHandler: emailChangeHandler,
+        inputBlurHandler: emailBlurHandler,
+        clearHandler: emailClearHandler,
+    } = useInput(ValidateEmail);
+    const {
+        text: password,
+        shouldDisplayError: passwordHasError,
+        textChangeHandler: passwordChangeHandler,
+        inputBlurHandler: passwordBlurHandler,
+        clearHandler: passwordClearHandler,
+    } = useInput(ValidatePasswordLength);
     return (
-        <div className={`bg-white rounded-3xl  border-2 border-neutral-200 p-4`}>
+        <div className={`bg-white mt-2  border-2 border-neutral-200 p-4`}>
             <Box sx={{ width: '350px', marginTop: 2}}>
                 <form onSubmit={onSubmitHandler}>
                     <Grid container className={`flex flex-col justify-items-start p-2`}>
-                        <span className={`text-4xl mb-4`}>Create Account</span>
+                        <span className={`text-4xl mb-4`}>Sign In</span>
                         <InputLabel className={`text-medium mt-1`} htmlFor={'email'}>Email</InputLabel>
-                        <TextField type={'text'} name={'email'} id={`email`} variant={`outlined`} size={'small'}/>
+                        <TextField
+                            value={email}
+                            onChange={emailChangeHandler}
+                            onBlur={emailBlurHandler}
+                            error={emailHasError}
+                            helperText={emailHasError && 'Please enter a valid email'}
+                            type={'text'} name={'email'} id={`email`} variant={`outlined`} size={'small'}/>
                         <InputLabel className={`text-medium mt-1`} htmlFor={'password'}>Password</InputLabel>
-                        <TextField type={'text'} name={'password'} id={`password`} variant={`outlined`} size={'small'}
+                        <TextField
+                            value={password}
+                            onChange={passwordChangeHandler}
+                            onBlur={passwordBlurHandler}
+                            error={passwordHasError}
+                            helperText={passwordHasError && 'Password must be at least 6 characters'}
+                            type={'password'} name={'password'} id={`password`} variant={`outlined`} size={'small'}
                                    placeholder={`Minimum 6 characters required`}/>
-                        <Button type={`submit`} className={`mt-4 bg-amber-200 text-black rounded`}>Register</Button>
+                        <Button type={`submit`} className={`mt-4 bg-amber-200 text-black rounded`}>Login</Button>
                     </Grid>
                 </form>
                 <div className={`mt-[10px]`}>
                     <small>
-                        <span>By creating an account, your agree to Volex Store's</span>
+                        <span>By continuing, you agree to Volex Store's</span>
                     </small>
                 </div>
                 <div className={`mt-[10px]`}>

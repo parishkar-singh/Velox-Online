@@ -4,11 +4,28 @@ import Link from "next/link";
 import useInput from "@/hooks/input/use-input";
 import {validateNameLength, ValidatePasswordLength} from "@/utils/validation/length";
 import {ValidateEmail} from "@/utils/validation/email";
+import {NewUser} from "@/components/models/NewUser";
 
 const RegistrationForm: React.FC = () => {
+    const clearForm = () => {
+        nameClearHandler();
+        emailClearHandler();
+        passwordClearHandler();
+        confirmPasswordClearHandler();
+    }
     const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+        if (nameHasError || emailHasError || passwordHasError || confirmPasswordHasError || password !== confirmPassword)
+            return;
+        if (name.length === 0 || email.length === 0 || password.length === 0 || confirmPassword.length === 0)
+            return;
+        const newUser:NewUser = {
+            name,
+            email,
+            password,
+        }
+        console.log(newUser);
         e.preventDefault();
-        console.log('form submitted');
+        clearForm();
     }
     const {
         text: name,
@@ -38,7 +55,7 @@ const RegistrationForm: React.FC = () => {
         inputBlurHandler: confirmPasswordBlurHandler,
         clearHandler: confirmPasswordClearHandler,
     } = useInput(ValidatePasswordLength);
-    
+
 
 
     return (
@@ -70,7 +87,15 @@ const RegistrationForm: React.FC = () => {
                                    placeholder={`Minimum 6 characters required`}/>
                         <InputLabel className={`text-medium mt-1`} htmlFor={'confirmPassword'}>Re-Enter
                             Password</InputLabel>
-                        <TextField type={'text'} name={'confirmPassword'} id={`confirmPassword`} variant={`outlined`}
+                        <TextField
+                            value={confirmPassword}
+                            onChange={confirmPasswordChangeHandler}
+                            onBlur={confirmPasswordBlurHandler}
+                            error={confirmPassword.length > 0 && confirmPassword !== password}
+                            helperText={confirmPassword.length > 0 && password !== confirmPassword
+                                ? 'Passwords does not match'
+                                : ''}
+                            type={'password'} name={'confirmPassword'} id={`confirmPassword`} variant={`outlined`}
                                    size={'small'} placeholder={`Minimum 6 characters required`}/>
                         <Button type={`submit`} className={`mt-4 bg-amber-200 text-black rounded`}>Register</Button>
                     </Grid>
