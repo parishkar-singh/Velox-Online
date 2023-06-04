@@ -1,11 +1,20 @@
 import React from 'react';
 import {Box, Grid, TextField, InputLabel, Typography, Button, Divider} from "@mui/material";
 import Link from "next/link";
+import useInput from "@/hooks/input/use-input";
+import {validateNameLength} from "@/utils/validation/length";
 const RegistrationForm: React.FC = () => {
     const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         console.log('form submitted');
     }
+    const {
+        text: name,
+        shouldDisplayError: nameHasError,
+        textChangeHandler: nameChangeHandler,
+        inputBlurHandler: nameBlurHandler,
+        clearHandler: nameClearHandler,
+    } = useInput(validateNameLength);
     return (
         <div className={`bg-white rounded-3xl border-2 border-neutral-200 p-4`}>
             <Box sx={{ width: '350px', marginTop: 2}}>
@@ -13,7 +22,7 @@ const RegistrationForm: React.FC = () => {
                     <Grid container className={`flex flex-col justify-items-start p-2`}>
                         <span className={`text-4xl mb-4`}>Create Account</span>
                         <InputLabel className={`text-medium mt-1`} htmlFor={'name'}>Your Name</InputLabel>
-                        <TextField type={'text'} name={'name'} id={`name`} variant={`outlined`} size={'small'}/>
+                        <TextField value={name} onChange={nameChangeHandler} onBlur={nameBlurHandler} error={nameHasError} helperText={nameHasError?'Enter your Name':' '} type={'text'} name={'name'} id={`name`} variant={`outlined`} size={'small'}/>
                         <InputLabel className={`text-medium mt-1`} htmlFor={'email'}>Email</InputLabel>
                         <TextField type={'text'} name={'email'} id={`email`} variant={`outlined`} size={'small'}/>
                         <InputLabel className={`text-medium mt-1`} htmlFor={'password'}>Password</InputLabel>
