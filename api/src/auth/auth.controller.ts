@@ -18,7 +18,7 @@ export class AuthController {
     }
     @Post('verify-jwt')
     @HttpCode(HttpStatus.OK)
-    async verifyJwt(@Body() payload:{jwt:string}): Promise<boolean> {
+    async verifyJwt(@Body() payload:{jwt:string}): Promise<{ exp: number }> {
         return await this.authService.verifyJwt(payload.jwt)
     }
 
