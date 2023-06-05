@@ -1,12 +1,18 @@
-import React from 'react';
-import {Box, Grid, TextField, InputLabel, Typography, Button, Divider} from "@mui/material";
+import React, {useEffect} from 'react';
+import {Box, Grid, TextField, InputLabel, Typography, Button, Divider, CircularProgress} from "@mui/material";
 import Link from "next/link";
 import useInput from "@/hooks/input/use-input";
 import {validateNameLength, ValidatePasswordLength} from "@/utils/validation/length";
 import {ValidateEmail} from "@/utils/validation/email";
 import {NewUser} from "@/models/NewUser";
+import {useAppDispatch, useAppSelector} from "@/redux/hooks/hooks";
+import {useRouter} from "next/router";
+import {register, reset} from "@/redux/authSlice";
 
 const RegistrationForm: React.FC = () => {
+    const router = useRouter();
+    const dispatch = useAppDispatch()
+    const { isLoading, isSuccess } = useAppSelector((state) => state.auth||{});
     const clearForm = () => {
         nameClearHandler();
         emailClearHandler();
@@ -14,19 +20,26 @@ const RegistrationForm: React.FC = () => {
         confirmPasswordClearHandler();
     }
     const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
         if (nameHasError || emailHasError || passwordHasError || confirmPasswordHasError || password !== confirmPassword)
             return;
         if (name.length === 0 || email.length === 0 || password.length === 0 || confirmPassword.length === 0)
             return;
-        const newUser:NewUser = {
+        const newUser: NewUser = {
             name,
             email,
             password,
         }
-        console.log(newUser);
-        e.preventDefault();
+        dispatch(register(newUser))
         clearForm();
     }
+    useEffect(() => {
+        if (isSuccess) {
+            dispatch(reset())
+            clearForm()
+        }
+        router.push('/Login')
+    }, [isSuccess, dispatch])
     const {
         text: name,
         shouldDisplayError: nameHasError,
@@ -56,7 +69,8 @@ const RegistrationForm: React.FC = () => {
         clearHandler: confirmPasswordClearHandler,
     } = useInput(ValidatePasswordLength);
 
-
+    if(isLoading)
+        return <CircularProgress className={`mt-2 text-black`}/>
 
     return (
         <div className={`bg-white mt-2 border-2 border-neutral-200 p-4`}>
@@ -84,7 +98,7 @@ const RegistrationForm: React.FC = () => {
                             error={passwordHasError}
                             helperText={passwordHasError ? 'Enter a valid password' : ' '}
                             type={'password'} name={'password'} id={`password`} variant={`outlined`} size={'small'}
-                                   placeholder={`Minimum 6 characters required`}/>
+                            placeholder={`Minimum 6 characters required`}/>
                         <InputLabel className={`text-medium mt-1`} htmlFor={'confirmPassword'}>Re-Enter
                             Password</InputLabel>
                         <TextField
@@ -96,7 +110,7 @@ const RegistrationForm: React.FC = () => {
                                 ? 'Passwords does not match'
                                 : ''}
                             type={'password'} name={'confirmPassword'} id={`confirmPassword`} variant={`outlined`}
-                                   size={'small'} placeholder={`Minimum 6 characters required`}/>
+                            size={'small'} placeholder={`Minimum 6 characters required`}/>
                         <Button type={`submit`} className={`mt-4 bg-amber-200 text-black rounded`}>Register</Button>
                     </Grid>
                 </form>

@@ -6,10 +6,10 @@ import {ThemeProvider} from '@mui/material'
 import {theme} from '@/utils/theme'
 export default function App({Component, pageProps}: AppProps) {
     return (
-        <ThemeProvider theme={theme}>
         <Provider store={store}>
+        <ThemeProvider theme={theme}>
             <Component {...pageProps} />
-        </Provider>
         </ThemeProvider>
+        </Provider>
     )
 }
