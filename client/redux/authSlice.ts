@@ -98,6 +98,7 @@ export const authSlice = createSlice({
                 state.isError = true
                 state.user = null
             })
+            // Login
             .addCase(login.pending, (state) => {
                 state.isLoading = true
 
@@ -116,6 +117,7 @@ export const authSlice = createSlice({
                     state.isAuthenticated = false
                 }
             )
+            // Logout
             .addCase(logout.pending, (state) => {
                     state.isLoading = true
                 }
@@ -131,6 +133,25 @@ export const authSlice = createSlice({
             .addCase(logout.rejected, (state) => {
                     state.isLoading = false
                     state.isError = true
+                }
+            )
+            // Verify JWT
+            .addCase(verifyJwt.pending, (state) => {
+                    state.isLoading = true
+                }
+            )
+            .addCase(verifyJwt.fulfilled, (state, action) => {
+                    state.isLoading = false
+                    state.isSuccess = true
+                    state.isAuthenticated = action.payload
+                }
+            )
+            .addCase(verifyJwt.rejected, (state) => {
+                    state.isLoading = false
+                    state.isError = true
+                    state.isAuthenticated = false
+                    state.user = null
+                    state.jwt = null
                 }
             )
     }
