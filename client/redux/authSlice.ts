@@ -4,6 +4,13 @@ import {Jwt} from "@/models/Jwt";
 import {NewUser} from "@/models/NewUser";
 import authService from "@/utils/services/auth.service";
 import {RootState} from "@/store";
+import {LoginUser} from "@/models/interfaces/LoginUser.interface";
+
+const storedUser: string | null = localStorage.getItem('user')
+const user: DisplayUser | null = !!storedUser ? JSON.parse(storedUser) : null
+
+const storedJwt: string | null = localStorage.getItem('jwt')
+const jwt: Jwt | null = !!storedJwt ? JSON.parse(storedJwt) : null
 
 interface AsyncState {
     isLoading: boolean;
@@ -16,12 +23,13 @@ interface AuthState extends AsyncState {
     jwt?: Jwt | null
     isAuthenticated?: boolean
 }
+
 const initialState: AuthState = {
     isLoading: false,
     isError: false,
     isSuccess: false,
-    user: null,
-    jwt: null,
+    user: user,
+    jwt: jwt,
     isAuthenticated: false
 }
 export const register = createAsyncThunk(
@@ -34,7 +42,37 @@ export const register = createAsyncThunk(
         }
     }
 )
+export const login = createAsyncThunk(
+    'auth/login',
+    async (user: LoginUser, thunkAPI) => {
+        try {
+            return await authService.login(user)
+        } catch (e) {
+            return thunkAPI.rejectWithValue('Unable to login')
+        }
 
+    }
+)
+export const logout = createAsyncThunk(
+    'auth/logout',
+    async () => {
+        try {
+            await authService.logout()
+        } catch (e) {
+            console.log(e)
+        }
+    }
+)
+export const verifyJwt = createAsyncThunk(
+    'auth/verify-jwt',
+    async (jwt: string, thunkAPI) => {
+        try {
+            return await authService.verifyJwt(jwt)
+        } catch (e) {
+            return thunkAPI.rejectWithValue('Unable to verify jwt')
+        }
+    }
+)
 export const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -60,9 +98,44 @@ export const authSlice = createSlice({
                 state.isError = true
                 state.user = null
             })
+            .addCase(login.pending, (state) => {
+                state.isLoading = true
+
+            })
+            .addCase(login.fulfilled, (state, action) => {
+                    state.isLoading = false
+                    state.isSuccess = true
+                    state.isAuthenticated = true
+                    state.jwt = action.payload
+                }
+            )
+            .addCase(login.rejected, (state) => {
+                    state.isLoading = false
+                    state.isError = true
+                    state.jwt = null
+                    state.isAuthenticated = false
+                }
+            )
+            .addCase(logout.pending, (state) => {
+                    state.isLoading = true
+                }
+            )
+            .addCase(logout.fulfilled, (state) => {
+                    state.isLoading = false
+                    state.isSuccess = true
+                    state.isAuthenticated = false
+                    state.user = null
+                    state.jwt = null
+                }
+            )
+            .addCase(logout.rejected, (state) => {
+                    state.isLoading = false
+                    state.isError = true
+                }
+            )
     }
 })
-export const { reset } = authSlice.actions;
+export const {reset} = authSlice.actions;
 export default authSlice.reducer
 export const selectedUser = (state: RootState) => {
     return state.auth;
