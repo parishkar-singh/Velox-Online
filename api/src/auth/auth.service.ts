@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {UserService} from "../user/user.service";
 import * as bcrypt from 'bcrypt';
 import {NewUserDTO} from "../user/dtos/new-user.dto";
@@ -8,7 +8,7 @@ import {JwtService} from "@nestjs/jwt";
 
 @Injectable()
 export class AuthService {
-    constructor(private userService: UserService,private jwtService: JwtService) {
+    constructor(private userService: UserService, private jwtService: JwtService) {
     }
 
     async hashPassword(password: string): Promise<string> {
@@ -40,10 +40,18 @@ export class AuthService {
         const {email, password} = existingUser
         const user = await this.validateUser(email, password)
         if (!user) return null
-        const jwt=await this.jwtService.signAsync({user})
-        return {token:jwt}
-        }
+        const jwt = await this.jwtService.signAsync({user})
+        return {token: jwt}
+    }
 
+    async verifyJwt(jwt: string): Promise<{ exp: number }> {
+        try {
+            const {exp} = await this.jwtService.verifyAsync(jwt)
+            return {exp}
+        } catch (e) {
+            throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED)
+        }
+    }
 }
 
 
