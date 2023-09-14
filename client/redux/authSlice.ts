@@ -57,7 +57,7 @@ export const logout = createAsyncThunk(
     'auth/logout',
     async () => {
         try {
-            await authService.logout()
+            authService.logout()
         } catch (e) {
             console.log(e)
         }

@@ -1,19 +1,30 @@
 import React from 'react';
-import {Box, Grid, TextField, InputLabel, Typography, Button, Divider} from "@mui/material";
+import {Box, Button, CircularProgress, Divider, Grid, InputLabel, TextField} from "@mui/material";
 import Link from "next/link";
 import useInput from "@/hooks/input/use-input";
 import {validateNameLength, ValidatePasswordLength} from "@/utils/validation/length";
 import {ValidateEmail} from "@/utils/validation/email";
-const LoginForm: React.FC = () => {
-    const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
-        if(emailHasError || passwordHasError)
-            return;
-        if(email.length === 0 || password.length === 0)
-            return;
+import {useAppDispatch, useAppSelector} from "@/redux/hooks/hooks";
+import {LoginUser} from "@/models/interfaces/LoginUser.interface";
+import {login} from "@/redux/authSlice";
 
-        e.preventDefault();
-        console.log('form submitted');
+const LoginForm: React.FC = () => {
+    const clearForm = () => {
+        emailClearHandler();
+        passwordClearHandler();
+    };
+    const dispatch = useAppDispatch();
+    const {isLoading, isSuccess,isAuthenticated} = useAppSelector((state) => state.auth)
+    const onSubmitHandler = (e: React.FormEvent<HTMLFormElement>) => {
+        if (emailHasError || passwordHasError)
+            return;
+        if (email.length === 0 || password.length === 0)
+            return;
+        const loginUser:LoginUser={email,password}
+        dispatch(login(loginUser))
     }
+    if (isLoading)
+        return <CircularProgress sx={{marginTop:'64px'}} color='primary'/>
     const {
         text: name,
         shouldDisplayError: nameHasError,
@@ -37,7 +48,7 @@ const LoginForm: React.FC = () => {
     } = useInput(ValidatePasswordLength);
     return (
         <div className={`bg-white mt-2  border-2 border-neutral-200 p-4`}>
-            <Box sx={{ width: '350px', marginTop: 2}}>
+            <Box sx={{width: '350px', marginTop: 2}}>
                 <form onSubmit={onSubmitHandler}>
                     <Grid container className={`flex flex-col justify-items-start p-2`}>
                         <span className={`text-4xl mb-4`}>Sign In</span>
@@ -57,7 +68,7 @@ const LoginForm: React.FC = () => {
                             error={passwordHasError}
                             helperText={passwordHasError && 'Password must be at least 6 characters'}
                             type={'password'} name={'password'} id={`password`} variant={`outlined`} size={'small'}
-                                   placeholder={`Minimum 6 characters required`}/>
+                            placeholder={`Minimum 6 characters required`}/>
                         <Button type={`submit`} className={`mt-4 bg-amber-200 text-black rounded`}>Login</Button>
                     </Grid>
                 </form>
@@ -68,7 +79,8 @@ const LoginForm: React.FC = () => {
                 </div>
                 <div className={`mt-[10px]`}>
                     <small>
-                        <a className={`text-blue-700`} href={`#`}>Conditions of use</a>{``} and {``} <a className={`text-blue-700`} href={`#`}>Privacy Notice</a>
+                        <a className={`text-blue-700`} href={`#`}>Conditions of use</a>{``} and {``} <a
+                        className={`text-blue-700`} href={`#`}>Privacy Notice</a>
                     </small>
                 </div>
                 <Divider className={`mt-2`}/>

@@ -36,7 +36,7 @@ export class AuthService {
     async login(existingUser: ExistingUserDTO): Promise<{ token: string } | null> {
         const {email, password} = existingUser
         const user = await this.validateUser(email, password)
-        if (!user) return null
+        if (!user) throw new HttpException('Credential invalid',HttpStatus.UNAUTHORIZED)
         const jwt = await this.jwtService.signAsync({user})
         return {token: jwt}
     }
