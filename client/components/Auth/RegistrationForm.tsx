@@ -1,5 +1,5 @@
 import React, {useEffect} from 'react';
-import {Box, Grid, TextField, InputLabel, Typography, Button, Divider, CircularProgress} from "@mui/material";
+import {Box, Button, CircularProgress, Divider, Grid, InputLabel, TextField} from "@mui/material";
 import Link from "next/link";
 import useInput from "@/hooks/input/use-input";
 import {validateNameLength, ValidatePasswordLength} from "@/utils/validation/length";
@@ -12,7 +12,7 @@ import {register, reset} from "@/redux/authSlice";
 const RegistrationForm: React.FC = () => {
     const router = useRouter();
     const dispatch = useAppDispatch()
-    const { isLoading, isSuccess } = useAppSelector((state) => state.auth||{});
+    const {isLoading, isSuccess} = useAppSelector((state) => state.auth || {});
     const clearForm = () => {
         nameClearHandler();
         emailClearHandler();
@@ -37,8 +37,8 @@ const RegistrationForm: React.FC = () => {
         if (isSuccess) {
             dispatch(reset())
             clearForm()
+            router.push('/Login')
         }
-        router.push('/Login')
     }, [isSuccess, dispatch])
     const {
         text: name,
@@ -69,7 +69,7 @@ const RegistrationForm: React.FC = () => {
         clearHandler: confirmPasswordClearHandler,
     } = useInput(ValidatePasswordLength);
 
-    if(isLoading)
+    if (isLoading)
         return <CircularProgress className={`mt-2 text-black`}/>
 
     return (

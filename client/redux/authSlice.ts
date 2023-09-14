@@ -6,8 +6,8 @@ import authService from "@/utils/services/auth.service";
 import {RootState} from "@/store";
 import {LoginUser} from "@/models/interfaces/LoginUser.interface";
 
-const storedUser: string | null = localStorage.getItem('user')
-const user: DisplayUser | null = !!storedUser ? JSON.parse(storedUser) : null
+const storedUser: string | null = localStorage.getItem('user');
+const user: DisplayUser | null = !!storedUser ? JSON.parse(storedUser) : null;
 
 const storedJwt: string | null = localStorage.getItem('jwt')
 const jwt: Jwt | null = !!storedJwt ? JSON.parse(storedJwt) : null
